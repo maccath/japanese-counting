@@ -37,51 +37,65 @@ class JapaneseNumeral
      */
     public function getKanji(): string
     {
-        return $this->getTenThousandsKanji($this->getTenThousands())
-          . $this->getThousandsKanji($this->getThousands())
-          . $this->getHundredsKanji($this->getHundreds())
-          . $this->getTensKanji($this->getTens())
-          . $this->getUnitsKanji($this->getUnits());
+        return $this->getKanjiDigits($this->number);
     }
 
     /**
-     * @return int
+     * @param int $number
+     * @return string
      */
-    private function getTenThousands(): int
+    public function getKanjiDigits(int $number = 0): string
     {
-        return (int) floor($this->number / 10000);
+        return $this->getTenThousandsKanji($this->getTenThousands($number))
+          . $this->getThousandsKanji($this->getThousands($number))
+          . $this->getHundredsKanji($this->getHundreds($number))
+          . $this->getTensKanji($this->getTens($number))
+          . $this->getUnitsKanji($this->getUnits($number));
     }
 
     /**
+     * @param int $number
      * @return int
      */
-    private function getThousands(): int
+    private function getTenThousands(int $number): int
     {
-        return (int) floor($this->number % 10000 / 1000);
+        return (int) floor($number / 10000);
     }
 
     /**
+     * @param int $number
      * @return int
      */
-    private function getHundreds(): int
+    private function getThousands(int $number): int
     {
-        return (int) floor($this->number % 1000 / 100);
+        return (int) floor($number % 10000 / 1000);
     }
 
     /**
+     * @param int $number
      * @return int
      */
-    private function getTens(): int
+    private function getHundreds(int $number): int
     {
-        return (int) floor($this->number % 100 / 10);
+        return (int) floor($number % 1000 / 100);
     }
 
     /**
+     * @param int $number
      * @return int
      */
-    private function getUnits(): int
+    private function getTens(int $number): int
     {
-        return $this->number % 100 % 10;
+        return (int) floor($number % 100 / 10);
+    }
+
+    /**
+     * @param int $number
+     * @return int
+     */
+    private function getUnits(int $number): int
+    {
+        return $number % 10000 % 1000 % 100 % 10;
     }
 
     /**
@@ -90,7 +104,7 @@ class JapaneseNumeral
      */
     private function getTenThousandsKanji(int $tenThousands): string
     {
-        return $tenThousands ? $this->getUnitsKanji($tenThousands) . self::DIGITS[10000] : '';
+        return $tenThousands ? $this->getKanjiDigits($tenThousands) . self::DIGITS[10000] : '';
     }
 
     /**
@@ -99,7 +113,7 @@ class JapaneseNumeral
      */
     private function getThousandsKanji(int $thousands): string
     {
-        return $thousands ? $this->getUnitsKanji($thousands) . self::DIGITS[1000] : '';
+        return $thousands ? $this->getKanjiDigits($thousands) . self::DIGITS[1000] : '';
     }
 
     /**
@@ -110,7 +124,7 @@ class JapaneseNumeral
     {
         if (!$hundreds) return '';
 
-        return $hundreds == 1 ? self::DIGITS[100] : $this->getUnitsKanji($hundreds) . self::DIGITS[100];
+        return $hundreds == 1 ? self::DIGITS[100] : $this->getKanjiDigits($hundreds) . self::DIGITS[100];
     }
 
     /**
@@ -121,7 +135,7 @@ class JapaneseNumeral
     {
         if (!$tens) return '';
 
-        return $tens == 1 ? self::DIGITS[10] : $this->getUnitsKanji($tens) . self::DIGITS[10];
+        return $tens == 1 ? self::DIGITS[10] : $this->getKanjiDigits($tens) . self::DIGITS[10];
     }
 
     /**
