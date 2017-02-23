@@ -26,13 +26,16 @@
         </style>
     </head>
     <body>
-        <h1>Slim</h1>
-        <div>a microframework for PHP</div>
+        <h1>A Random Number!</h1>
 
-        <?php if (isset($name)) : ?>
-            <h2>Hello <?= htmlspecialchars($name); ?>!</h2>
-        <?php else: ?>
-            <p>Try <a href="http://www.slimframework.com">SlimFramework</a>
-        <?php endif; ?>
+        <?php
+            $numeral = new \App\Numeral(random_int(1, 999));
+        ?>
+        <p>
+            The number <?=$numeral->getNumber();?> is <?=$numeral->convert(new \App\Conversions\KanjiConversionService());?> in Kanji.
+        </p>
+        <p>
+            Or it might appear as <?=$numeral->convert(new \App\Conversions\KanjiPriceConversionService());?> on a Japanese menu.
+        </p>
     </body>
 </html>
