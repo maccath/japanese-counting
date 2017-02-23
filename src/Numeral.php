@@ -18,6 +18,14 @@ class Numeral
     }
 
     /**
+     * @return int
+     */
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
+
+    /**
      * @param \App\Conversions\ConversionServiceInterface $conversionService
      * @return string
      */

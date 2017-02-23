@@ -20,6 +20,13 @@ class NumeralTest extends \PHPUnit_Framework_TestCase
         new Numeral(1.5);
     }
 
+    public function testNumeralReturnsNumber()
+    {
+        $number = random_int(0, 99999);
+        $numeral = new Numeral($number);
+        $this->assertEquals($number, $numeral->getNumber());
+    }
+
     public function testCanConvert()
     {
         $int = random_int(0, 99999);
