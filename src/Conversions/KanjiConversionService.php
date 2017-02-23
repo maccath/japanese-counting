@@ -4,7 +4,10 @@ namespace App\Conversions;
 
 class KanjiConversionService implements ConversionServiceInterface
 {
-    /** @var array */
+    /** @const int */
+    const MAX_EXPONENT = 3;
+
+    /** @const array */
     const DIGITS = [
         1 => '一',
         2 => '二',
@@ -35,56 +38,23 @@ class KanjiConversionService implements ConversionServiceInterface
      */
     private function getKanjiDigits(int $number = 0): string
     {
-        return $this->getTenThousandsKanji($this->getTenThousands($number))
-          . $this->getThousandsKanji($this->getThousands($number))
-          . $this->getHundredsKanji($this->getHundreds($number))
-          . $this->getTensKanji($this->getTens($number))
-          . $this->getUnitsKanji($this->getUnits($number));
+        return $this->getTenThousandsKanji($this->getDigitForExponent($number, 4))
+          . $this->getThousandsKanji($this->getDigitForExponent($number, 3))
+          . $this->getHundredsKanji($this->getDigitForExponent($number, 2))
+          . $this->getTensKanji($this->getDigitForExponent($number, 1))
+          . $this->getUnitsKanji($this->getDigitForExponent($number, 0));
     }
 
     /**
      * @param int $number
+     * @param int $exponent
      * @return int
      */
-    private function getTenThousands(int $number): int
+    private function getDigitForExponent(int $number, int $exponent): int
     {
-        return (int) floor($number / 10000);
-    }
-
-    /**
-     * @param int $number
-     * @return int
-     */
-    private function getThousands(int $number): int
-    {
-        return (int) floor($number % 10000 / 1000);
-    }
-
-    /**
-     * @param int $number
-     * @return int
-     */
-    private function getHundreds(int $number): int
-    {
-        return (int) floor($number % 1000 / 100);
-    }
-
-    /**
-     * @param int $number
-     * @return int
-     */
-    private function getTens(int $number): int
-    {
-        return (int) floor($number % 100 / 10);
-    }
-
-    /**
-     * @param int $number
-     * @return int
-     */
-    private function getUnits(int $number): int
-    {
-        return $number % 10000 % 1000 % 100 % 10;
+        return $exponent > self::MAX_EXPONENT
+            ? (int) floor($number / pow(10, $exponent))
+            : (int) floor($number % pow(10, $exponent + 1) / pow(10, $exponent));
     }
 
     /**
