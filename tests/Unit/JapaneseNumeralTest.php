@@ -66,6 +66,9 @@ class JapaneseNumeralTest extends \PHPUnit_Framework_TestCase
           [550, '五百五十'],
           [555, '五百五十五'],
           [999, '九百九十九'],
+          [1000, '一千'],
+          [1999, '一千九百九十九'],
+          [9999, '九千九百九十九'],
         ];
     }
 }

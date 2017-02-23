@@ -20,6 +20,7 @@ class JapaneseNumeral
         9 => '九',
         10 => '十',
         100 => '百',
+        1000 => '千',
     ];
 
     /**
@@ -35,7 +36,8 @@ class JapaneseNumeral
      */
     public function getKanji(): string
     {
-        return $this->getHundredsKanji($this->getHundreds())
+        return $this->getThousandsKanji($this->getThousands())
+          . $this->getHundredsKanji($this->getHundreds())
           . $this->getTensKanji($this->getTens())
           . $this->getUnitsKanji($this->getUnits());
     }
@@ -43,9 +45,17 @@ class JapaneseNumeral
     /**
      * @return int
      */
+    private function getThousands(): int
+    {
+        return (int) floor($this->number / 1000);
+    }
+
+    /**
+     * @return int
+     */
     private function getHundreds(): int
     {
-        return (int) floor($this->number / 100);
+        return (int) floor($this->number % 1000 / 100);
     }
 
     /**
@@ -62,6 +72,15 @@ class JapaneseNumeral
     private function getUnits(): int
     {
         return $this->number % 100 % 10;
+    }
+
+    /**
+     * @param int $thousands
+     * @return string
+     */
+    private function getThousandsKanji(int $thousands): string
+    {
+        return $thousands ? $this->getUnitsKanji($thousands) . self::DIGITS[1000] : '';
     }
 
     /**
