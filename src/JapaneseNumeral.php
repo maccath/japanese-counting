@@ -34,16 +34,43 @@ class JapaneseNumeral
      */
     public function getKanji(): string
     {
-        if ($this->number > 10) {
-            $tens = floor($this->number / 10);
-            $units = $this->number % 10;
+        return $this->getTensKanji($this->getTens())
+          . $this->getUnitsKanji($this->getUnits());
+    }
 
-            $kanji = $tens > 1 ? self::DIGITS[$tens] . '十' : '十';
-            $kanji .= self::DIGITS[$units] ?? '';
+    /**
+     * @return int
+     */
+    private function getTens(): int
+    {
+        return (int) floor($this->number / 10);
+    }
 
-            return $kanji;
-        }
+    /**
+     * @return int
+     */
+    private function getUnits(): int
+    {
+        return $this->number % 10;
+    }
 
-        return self::DIGITS[$this->number];
+    /**
+     * @param int $tens
+     * @return string
+     */
+    private function getTensKanji(int $tens): string
+    {
+        if (!$tens) return '';
+
+        return $tens == 1 ? '十' : $this->getUnitsKanji($tens) . '十';
+    }
+
+    /**
+     * @param int $units
+     * @return string
+     */
+    private function getUnitsKanji(int $units): string
+    {
+        return self::DIGITS[$units] ?? '';
     }
 }
