@@ -2,11 +2,8 @@
 
 namespace App;
 
-class JapaneseNumeral
+class KanjiConversionService implements ConversionServiceInterface
 {
-    /** @var int */
-    private $number;
-
     /** @var array */
     const DIGITS = [
         1 => '一',
@@ -25,26 +22,18 @@ class JapaneseNumeral
     ];
 
     /**
-     * @param int $number
+     * {@inheritdoc}
      */
-    public function __construct(int $number)
+    public function convert(int $int): string
     {
-        $this->number = $number;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKanji(): string
-    {
-        return $this->getKanjiDigits($this->number);
+        return $this->getKanjiDigits($int);
     }
 
     /**
      * @param int $number
      * @return string
      */
-    public function getKanjiDigits(int $number = 0): string
+    private function getKanjiDigits(int $number = 0): string
     {
         return $this->getTenThousandsKanji($this->getTenThousands($number))
           . $this->getThousandsKanji($this->getThousands($number))

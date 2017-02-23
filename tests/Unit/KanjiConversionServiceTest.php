@@ -2,33 +2,20 @@
 
 namespace Tests\Unit;
 
-use App\JapaneseNumeral;
+use App\KanjiConversionService;
 
-class JapaneseNumeralTest extends \PHPUnit_Framework_TestCase
+class KanjiConversionServiceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testJapaneseNumeralExists()
-    {
-        new JapaneseNumeral(100);
-    }
-
-    /**
-     * @expectedException
-     */
-    public function testJapaneseNumeralMustTakeInteger()
-    {
-        new JapaneseNumeral(1.5);
-    }
-
     /**
      * @dataProvider numeralsKanjiProvider
      * @param int $int
      * @param string $kanji
      */
-    public function testJapaneseNumeralCreatesKanji(int $int, string $kanji)
+    public function testKanjiConversionServiceCreatesKanji(int $int, string $kanji)
     {
-        $japaneseNumeral = new JapaneseNumeral($int);
+        $KanjiConversionService = new KanjiConversionService();
 
-        $this->assertEquals($kanji, $japaneseNumeral->getKanji());
+        $this->assertEquals($kanji, $KanjiConversionService->convert($int));
     }
 
     public function numeralsKanjiProvider()
