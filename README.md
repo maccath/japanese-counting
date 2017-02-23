@@ -1,26 +1,25 @@
-# Slim Framework 3 Skeleton Application
+# Japanese Counting
 
-Use this skeleton application to quickly setup and start working on a new Slim Framework 3 application. This application uses the latest Slim 3 with the PHP-View template renderer. It also uses the Monolog logger.
+[![Build Status](https://travis-ci.org/maccath/japanese-counting.svg)](https://travis-ci.org/maccath/japanese-counting)
 
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+An application to display the innumerable ways of counting in the Japanese language.
 
-## Install the Application
+## Installation
 
-Run this command from the directory in which you want to install your new Slim Framework application.
+**Assumption**: you have installed Composer globally.
 
-    php composer.phar create-project slim/slim-skeleton [my-app-name]
+After checking out this repository, navigate to its directory and run:
 
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
+    composer install
 
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writeable.
+To run the application in development, you can also run this command:
 
-To run the application in development, you can also run this command. 
+	composer start
 
-	php composer.phar start
+## Testing
 
-Run this command to run the test suite
+You can run the test suite by using:
 
-	php composer.phar test
+	composer test
 
-That's it! Now go build something cool.
+Or just `phpunit` to run PHPUnit tests.
