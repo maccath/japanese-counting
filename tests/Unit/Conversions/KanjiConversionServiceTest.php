@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Conversions;
 
-use App\KanjiConversionService;
+use App\Conversions\KanjiConversionService;
 
 class KanjiConversionServiceTest extends \PHPUnit_Framework_TestCase
 {

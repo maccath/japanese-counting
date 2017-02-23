@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\ConversionServiceInterface;
+use App\Conversions\ConversionServiceInterface;
 use App\Numeral;
 
 class NumeralTest extends \PHPUnit_Framework_TestCase

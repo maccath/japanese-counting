@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Conversions;
 
-use App\KanjiPriceConversionService;
+use App\Conversions\KanjiPriceConversionService;
 
 class KanjiPriceConversionServiceTest extends \PHPUnit_Framework_TestCase
 {

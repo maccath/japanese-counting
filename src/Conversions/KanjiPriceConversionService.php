@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Conversions;
 
 class KanjiPriceConversionService implements ConversionServiceInterface
 {
