@@ -5,7 +5,7 @@ namespace App\Conversions;
 class KanjiConversionService implements ConversionServiceInterface
 {
     /** @const int */
-    const MAX_EXPONENT = 3;
+    const MAX_EXPONENT = 4;
 
     /** @const array */
     const DIGITS = [
@@ -38,11 +38,9 @@ class KanjiConversionService implements ConversionServiceInterface
      */
     private function getKanjiDigits(int $number = 0): string
     {
-        return $this->getTenThousandsKanji($this->getDigitForExponent($number, 4))
-          . $this->getThousandsKanji($this->getDigitForExponent($number, 3))
-          . $this->getHundredsKanji($this->getDigitForExponent($number, 2))
-          . $this->getTensKanji($this->getDigitForExponent($number, 1))
-          . $this->getUnitsKanji($this->getDigitForExponent($number, 0));
+        return array_reduce(range(self::MAX_EXPONENT, 0, -1), function ($string, $exponent) use ($number) {
+           return $string . $this->getKanjiForExponent($number, $exponent);
+        });
     }
 
     /**
@@ -52,57 +50,24 @@ class KanjiConversionService implements ConversionServiceInterface
      */
     private function getDigitForExponent(int $number, int $exponent): int
     {
-        return $exponent > self::MAX_EXPONENT
+        return $exponent == self::MAX_EXPONENT
             ? (int) floor($number / pow(10, $exponent))
             : (int) floor($number % pow(10, $exponent + 1) / pow(10, $exponent));
     }
 
     /**
-     * @param int $tenThousands
+     * @param int $number
+     * @param int $exponent
      * @return string
      */
-    private function getTenThousandsKanji(int $tenThousands): string
+    private function getKanjiForExponent(int $number, int $exponent): string
     {
-        return $tenThousands ? $this->getKanjiDigits($tenThousands) . self::DIGITS[10000] : '';
-    }
+        $number = $this->getDigitForExponent($number, $exponent);
 
-    /**
-     * @param int $thousands
-     * @return string
-     */
-    private function getThousandsKanji(int $thousands): string
-    {
-        return $thousands ? $this->getKanjiDigits($thousands) . self::DIGITS[1000] : '';
-    }
+        if (!$exponent) return self::DIGITS[$number] ?? '';
+        if (($exponent == 1 || $exponent == 2) && !$number) return '';
+        if (($exponent == 1 || $exponent == 2) && $number == 1) return self::DIGITS[pow(10, $exponent)];
 
-    /**
-     * @param int $hundreds
-     * @return string
-     */
-    private function getHundredsKanji(int $hundreds): string
-    {
-        if (!$hundreds) return '';
-
-        return $hundreds == 1 ? self::DIGITS[100] : $this->getKanjiDigits($hundreds) . self::DIGITS[100];
-    }
-
-    /**
-     * @param int $tens
-     * @return string
-     */
-    private function getTensKanji(int $tens): string
-    {
-        if (!$tens) return '';
-
-        return $tens == 1 ? self::DIGITS[10] : $this->getKanjiDigits($tens) . self::DIGITS[10];
-    }
-
-    /**
-     * @param int $units
-     * @return string
-     */
-    private function getUnitsKanji(int $units): string
-    {
-        return self::DIGITS[$units] ?? '';
+        return $number ? $this->getKanjiDigits($number) . self::DIGITS[pow(10, $exponent)] : '';
     }
 }
