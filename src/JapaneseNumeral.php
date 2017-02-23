@@ -34,6 +34,16 @@ class JapaneseNumeral
      */
     public function getKanji(): string
     {
+        if ($this->number > 10) {
+            $tens = floor($this->number / 10);
+            $units = $this->number % 10;
+
+            $kanji = $tens > 1 ? self::DIGITS[$tens] . '十' : '十';
+            $kanji .= self::DIGITS[$units] ?? '';
+
+            return $kanji;
+        }
+
         return self::DIGITS[$this->number];
     }
 }
