@@ -4,8 +4,12 @@ namespace App\Conversions;
 
 class KanjiConversionService implements ConversionServiceInterface
 {
-    /** @const int */
-    const MAX_EXPONENT = 4;
+    /** @const int exponents */
+    const UNITS = 0;
+    const TENS = 1;
+    const HUNDREDS = 2;
+    const THOUSANDS = 3;
+    const TENTHOUSANDS = 4;
 
     /** @const array */
     const DIGITS = [
@@ -38,7 +42,7 @@ class KanjiConversionService implements ConversionServiceInterface
      */
     private function getKanjiDigits(int $number = 0): string
     {
-        return array_reduce(range(self::MAX_EXPONENT, 0, -1), function ($string, $exponent) use ($number) {
+        return array_reduce(range(self::TENTHOUSANDS, 0, -1), function ($string, $exponent) use ($number) {
            return $string . $this->getKanjiForExponent($number, $exponent);
         });
     }
@@ -50,7 +54,7 @@ class KanjiConversionService implements ConversionServiceInterface
      */
     private function getDigitForExponent(int $number, int $exponent): int
     {
-        return $exponent == self::MAX_EXPONENT
+        return $exponent >= self::TENTHOUSANDS
             ? (int) floor($number / pow(10, $exponent))
             : (int) floor($number % pow(10, $exponent + 1) / pow(10, $exponent));
     }
@@ -64,10 +68,27 @@ class KanjiConversionService implements ConversionServiceInterface
     {
         $number = $this->getDigitForExponent($number, $exponent);
 
-        if (!$exponent) return self::DIGITS[$number] ?? '';
-        if (($exponent == 1 || $exponent == 2) && !$number) return '';
-        if (($exponent == 1 || $exponent == 2) && $number == 1) return self::DIGITS[pow(10, $exponent)];
+        if (!$exponent || !$number) return self::DIGITS[$number] ?? '';
 
-        return $number ? $this->getKanjiDigits($number) . self::DIGITS[pow(10, $exponent)] : '';
+        if ($this->prefixIfSingular($exponent) || $number > 1) {
+           $prefix = $this->getKanjiDigits($number);
+        }
+
+        return ($prefix ?? '') . self::DIGITS[pow(10, $exponent)];
+    }
+
+    /**
+     * When displaying a singular value of an exponential kanji, do we prefix
+     * it with the kanji for 'one'?
+     *
+     * 一百 (one hundred - invalid) vs　百 (hundred - valid)
+     * 一千　(one thousand - valid) vs 千 (thousand - invalid)
+     *
+     * @param int $exponent
+     * @return bool
+     */
+    private function prefixIfSingular(int $exponent): bool
+    {
+        return ! ($exponent == self::TENS || $exponent == self::HUNDREDS);
     }
 }
