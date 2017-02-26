@@ -12,7 +12,7 @@ class HomepageTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('A Random Number!', (string)$response->getBody());
+        $this->assertContains('Counting in Japanese', (string)$response->getBody());
     }
 
     /**
